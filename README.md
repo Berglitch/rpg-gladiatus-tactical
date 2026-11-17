@@ -28,9 +28,12 @@ O jogo combina o charme e a progressão viciante dos clássicos jogos persistent
   - **Habilidade Inata (Força Aprimorada):** Concede **+2 de Força** permanente ao personagem.
 
 - **Sistema Tático em Grid (Roll20 / VTT Style):**
-  - **Escala:** Cada quadrado do grid equivale a **1,5 metros**.
-  - **Deslocamento:** Cada combatente pode se mover até **9 metros (6 quadrados)** por turno.
-  - **Prévia de Movimento (Pathfinding):** Destaque visual da área alcançável no grid, contornando obstáculos de pedra.
+  - **Dimensões do Campo:** Grid ampliado de **16x10 quadrados** com mapa de batalha na floresta.
+  - **Escala & Custo de Movimento:** 
+    - Quadrado ortogonal (reto) = **1,5 metros**.
+    - Quadrado diagonal = **3,0 metros** (o dobro do deslocamento).
+  - **Deslocamento:** Cada combatente pode se mover até **9 metros** por turno (até 6 casas em linha reta ou 3 casas na diagonal).
+  - **Prévia Inteligente (Dijkstra):** Destaque visual da área alcançável no grid, calculando com precisão os custos ortogonais e diagonais e contornando árvores e pedras.
   - **Economia de Ações por Turno:** **1 Movimento** e **1 Ação** (atacar/defender) por turno.
   - **Rolagem de Iniciativa:** Rolagem de dado ($d20 + \text{Destreza}$) com anúncio animado de início de combate.
 
@@ -40,10 +43,12 @@ O jogo combina o charme e a progressão viciante dos clássicos jogos persistent
 
 ```text
 rpg-browser-game/
-├── index.html       # Estrutura visual, ficha de herói, modal de arena e grid tático
-├── game.js          # Motor matemático de atributos, pathfinding e loop de combate
-├── style.css        # Tema dark fantasy, efeitos de borda metálica e tokens Roll20
-└── README.md        # Documentação completa do projeto
+├── index.html            # Estrutura visual, ficha de herói, modal de arena e grid tático
+├── game.js               # Motor matemático de atributos, pathfinding e loop de combate
+├── style.css             # Tema dark fantasy, efeitos de borda metálica e tokens Roll20
+├── map-battleground.jpg  # Mapa de batalha da floresta usado como background do grid
+├── goblin-art.png        # Arte oficial do Goblin Espadachim enviada para o token
+└── README.md             # Documentação completa do projeto
 ```
 
 ---

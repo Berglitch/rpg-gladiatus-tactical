@@ -349,7 +349,7 @@
   </main>
 
   <!-- MODAL / PAINEL DA ARENA DE COMBATE ESTILO GLADIATUS -->
-  <div id="combat-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+  <div id="combat-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 sm:p-4">
     
     <!-- ANÚNCIO NO CANTO SUPERIOR CENTRAL: COMBATE INICIADO -->
     <div id="combat-banner-alert" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-none animate-combat-banner">
@@ -359,163 +359,182 @@
       </div>
     </div>
 
-    <div class="bg-stone-900 border-2 border-amber-600/70 rounded-2xl max-w-4xl w-full p-5 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
+    <div class="bg-stone-900 border-2 border-amber-600/70 rounded-2xl max-w-6xl w-full shadow-2xl relative flex flex-col max-h-[96vh] overflow-hidden">
       
-      <!-- Cabeçalho do Combate com Indicador de Turno e Iniciativa -->
-      <div class="flex items-center justify-between pb-3 border-b border-stone-800">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded bg-amber-950 border border-amber-600 flex items-center justify-center text-amber-300">
-            <i data-lucide="swords" class="w-5 h-5"></i>
+      <!-- CABEÇALHO DO COMBATE & BARRA DE ORDEM DE TURNOS (TRACKER) -->
+      <div class="p-3 sm:p-4 border-b border-stone-800 bg-stone-950/90 shrink-0">
+        <div class="flex items-center justify-between gap-3 mb-2.5">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-amber-950 border border-amber-600 flex items-center justify-center text-amber-300 shrink-0">
+              <i data-lucide="swords" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-serif font-bold text-amber-300 leading-tight">Emboscada na Floresta</h3>
+              <p class="text-[10px] sm:text-xs text-stone-400">Combate Tático em Grid &bull; 1,5m por quadrado</p>
+            </div>
           </div>
-          <div>
-            <h3 class="text-base font-serif font-bold text-amber-300">Arena Tática: Valerius vs Goblin Espadachim</h3>
-            <p id="initiative-display" class="text-[11px] text-stone-400 font-mono">Iniciativa: Aguardando rolagem...</p>
+
+          <!-- BOTÕES DO TOPO: ZOOM E FECHAR -->
+          <div class="flex items-center gap-2">
+            <div class="bg-stone-900 border border-stone-700 rounded-lg p-1 flex items-center gap-1.5 text-xs shadow-inner">
+              <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-stone-400 ml-1"></i>
+              <button onclick="zoomOut()" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold flex items-center justify-center transition active:scale-95" title="Diminuir Zoom">-</button>
+              <button onclick="resetZoom()" id="zoom-level-label" class="font-mono text-amber-300 text-[11px] px-1 font-bold hover:underline" title="Resetar Zoom">100%</button>
+              <button onclick="zoomIn()" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold flex items-center justify-center transition active:scale-95" title="Aumentar Zoom">+</button>
+            </div>
+            <button onclick="closeCombatModal()" class="text-stone-400 hover:text-stone-200 p-1.5 rounded-lg hover:bg-stone-800 transition">
+              <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
           </div>
         </div>
 
-        <!-- INDICADOR VISUAL DO TURNO ATUAL -->
-        <div class="flex items-center gap-3">
-          <div id="turn-indicator-badge" class="px-4 py-1.5 rounded-lg border font-serif font-black text-xs uppercase tracking-wider transition-all duration-300 shadow">
+        <!-- MENU VISUAL DA ORDEM DE TURNOS (INITIATIVE TRACKER) -->
+        <div class="bg-stone-900/80 border border-stone-800 rounded-xl p-2 flex items-center justify-between gap-3 overflow-x-auto">
+          <div class="flex items-center gap-1.5 text-xs text-stone-400 font-serif font-bold shrink-0">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-amber-400"></i>
+            <span>Ordem dos Turnos:</span>
+          </div>
+
+          <div id="initiative-tracker-list" class="flex items-center gap-3 shrink-0">
+            <!-- Gerado dinamicamente via JS (cards dos combatentes com badges de iniciativa) -->
+          </div>
+
+          <div id="turn-indicator-badge" class="px-3 py-1 rounded-lg border font-serif font-black text-xs uppercase tracking-wider shrink-0 shadow">
             SEU TURNO
           </div>
-          <button onclick="closeCombatModal()" class="text-stone-400 hover:text-stone-200 p-1">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
         </div>
       </div>
 
-      <!-- Placar dos Combatentes -->
-      <div class="grid grid-cols-2 gap-4 my-2.5">
-        <!-- Jogador -->
-        <div class="bg-stone-950/80 border border-stone-800 rounded-xl p-3">
-          <div class="flex justify-between items-center mb-1">
-            <span class="font-serif font-bold text-amber-300 text-xs sm:text-sm" id="combat-player-name">Valerius (Guerreiro)</span>
-            <span class="text-[10px] text-stone-400 font-mono">Deslocamento: 9m (6 quad.)</span>
-          </div>
-          <!-- Barras de HP, MP, EP em combate -->
-          <div class="space-y-1 text-xs">
-            <div>
-              <div class="flex justify-between text-[10px] mb-0.5">
-                <span class="text-red-400 font-semibold">Vida</span>
-                <span class="font-mono text-stone-300"><span id="combat-p-hp">20</span> / <span id="combat-p-maxhp">20</span></span>
+      <!-- CORPO CENTRAL COM SCROLL INDEPENDENTE (Placar, Mapa Ampliado e Log) -->
+      <div class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
+        
+        <!-- Placar dos Combatentes (HP, Energia, Distância) -->
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
+          <!-- Jogador -->
+          <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3 flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150&auto=format&fit=crop&q=80" class="w-12 h-12 rounded-lg border-2 border-amber-600 object-cover shrink-0 shadow" />
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-serif font-bold text-amber-300 text-xs sm:text-sm truncate" id="combat-player-name">Valerius</span>
+                <span class="text-[10px] text-stone-400 font-mono shrink-0">9m desloc.</span>
               </div>
-              <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-red-950">
-                <div id="combat-bar-p-hp" class="bg-red-600 h-full transition-all duration-300" style="width: 100%;"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between text-[10px] mb-0.5">
-                <span class="text-amber-400 font-semibold">Energia</span>
-                <span class="font-mono text-stone-300"><span id="combat-p-ep">100</span> / <span id="combat-p-maxep">100</span></span>
-              </div>
-              <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-amber-950">
-                <div id="combat-bar-p-ep" class="bg-amber-500 h-full transition-all duration-300" style="width: 100%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Inimigo: Goblin -->
-        <div class="bg-stone-950/80 border border-stone-800 rounded-xl p-3">
-          <div class="flex justify-between items-center mb-1">
-            <span class="font-serif font-bold text-emerald-400 text-xs sm:text-sm">Goblin Espadachim</span>
-            <span class="text-[10px] text-stone-400 font-mono">5 HP &bull; Espada Curta (2 Dano)</span>
-          </div>
-          <div class="space-y-1 text-xs">
-            <div>
-              <div class="flex justify-between text-[10px] mb-0.5">
-                <span class="text-red-400 font-semibold">Vida do Goblin</span>
-                <span class="font-mono text-stone-300"><span id="combat-e-hp">5</span> / 5</span>
-              </div>
-              <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-red-950">
-                <div id="combat-bar-e-hp" class="bg-emerald-600 h-full transition-all duration-300" style="width: 100%;"></div>
+              <div class="space-y-1">
+                <div>
+                  <div class="flex justify-between text-[10px] mb-0.5">
+                    <span class="text-red-400 font-bold">Vida: <span id="combat-p-hp">20</span>/<span id="combat-p-maxhp">20</span></span>
+                  </div>
+                  <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-red-950/80">
+                    <div id="combat-bar-p-hp" class="bg-red-600 h-full transition-all duration-300" style="width: 100%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[10px] mb-0.5">
+                    <span class="text-amber-400 font-bold">Energia: <span id="combat-p-ep">100</span>/<span id="combat-p-maxep">100</span></span>
+                  </div>
+                  <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-amber-950/80">
+                    <div id="combat-bar-p-ep" class="bg-amber-500 h-full transition-all duration-300" style="width: 100%;"></div>
+                  </div>
+                </div>
               </div>
             </div>
-            <p class="text-[10px] text-stone-400 mt-1 italic">Distância do alvo: <strong id="combat-distance-label" class="text-amber-300 font-mono">0 metros</strong></p>
+          </div>
+
+          <!-- Inimigo: Goblin -->
+          <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3 flex items-center gap-3">
+            <img src="goblin-art.png" class="w-12 h-12 rounded-lg border-2 border-emerald-600 object-cover object-top bg-stone-900 shrink-0 shadow" />
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-serif font-bold text-emerald-400 text-xs sm:text-sm truncate">Goblin Espadachim</span>
+                <span class="text-[10px] text-stone-400 font-mono shrink-0">Espada Curta (2 Dano)</span>
+              </div>
+              <div class="space-y-1">
+                <div class="flex justify-between text-[10px]">
+                  <span class="text-red-400 font-bold">Vida: <span id="combat-e-hp">5</span>/5</span>
+                  <span class="text-stone-400">Distância: <strong id="combat-distance-label" class="text-amber-300 font-mono">0m</strong></span>
+                </div>
+                <div class="w-full bg-stone-900 h-2 rounded-full overflow-hidden border border-red-950/80">
+                  <div id="combat-bar-e-hp" class="bg-emerald-600 h-full transition-all duration-300" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- MAPA TÁTICO EM GRID ESTILO ROLL20 (1,5m por quadrado) -->
-      <div class="my-1.5 bg-stone-950 border-2 border-amber-900/60 rounded-xl p-2.5 shadow-inner">
-        <div class="flex items-center justify-between text-[11px] mb-1.5 text-stone-400">
-          <span class="flex items-center gap-1.5 text-amber-300 font-semibold">
-            <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-400"></i>
-            Grid Tático (1 quadrado = 1,5m) &bull; Deslocamento máximo: 9m (6 quadrados)
-          </span>
-          <span id="move-mode-status" class="text-sky-400 font-mono text-[10px] bg-sky-950/60 border border-sky-800/40 px-2 py-0.5 rounded">
-            Selecione "Mover" para ver o alcance
-          </span>
-        </div>
-
-        <!-- Container do Grid -->
-        <div class="overflow-x-auto flex justify-center py-0.5">
-          <div id="tactical-grid" class="battle-grid-container border border-stone-800 rounded-lg p-1 grid grid-cols-8 gap-1 select-none">
-            <!-- As células são geradas via JavaScript -->
-          </div>
-        </div>
-      </div>
-
-      <!-- STATUS DA RODADA DO JOGADOR (1 Movimento + 1 Ação) -->
-      <div class="bg-stone-950/90 border border-stone-800 rounded-lg px-3 py-1.5 flex items-center justify-between text-xs font-mono">
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-1.5">
-            <span class="text-stone-400">Movimentação (9m):</span>
-            <span id="status-movement" class="font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800/50 px-2 py-0.5 rounded text-[10px]">
-              ✓ DISPONÍVEL
+        <!-- MAPA TÁTICO EM GRID ESTILO ROLL20 (16x10) -->
+        <div class="bg-stone-950 border-2 border-stone-800 rounded-xl p-3 shadow-inner">
+          <div class="flex items-center justify-between text-xs mb-2 text-stone-400">
+            <span class="flex items-center gap-1.5 text-amber-300 font-bold">
+              <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
+              Campo de Batalha (16x10) &bull; Ortogonal: 1,5m &bull; <span class="text-sky-300 font-semibold">Diagonal: 3,0m</span>
+            </span>
+            <span id="move-mode-status" class="text-sky-300 font-mono text-[11px] bg-sky-950/80 border border-sky-800/60 px-2.5 py-0.5 rounded shadow">
+              Clique em "Mover" abaixo para ver o alcance
             </span>
           </div>
-          <div class="flex items-center gap-1.5">
+
+          <!-- Container do Grid com scroll horizontal e vertical suave -->
+          <div class="overflow-x-auto overflow-y-auto max-h-[50vh] p-2 flex justify-start sm:justify-center rounded-lg bg-black/40">
+            <div id="tactical-grid" class="battle-grid-container select-none">
+              <!-- As células são geradas via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Log de Combate estilo BiteFight/Gladiatus -->
+        <div class="bg-stone-950 border border-stone-800 rounded-xl p-3">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-1 flex items-center gap-1.5">
+            <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+            Relatório do Combate
+          </div>
+          <div id="combat-log" class="overflow-y-auto space-y-1 text-xs font-mono max-h-[110px]">
+            <div class="text-stone-500 italic">⚔️ O combate começou!</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MENU DE AÇÕES FIXO NO RODAPÉ (STICKY FOOTER - NUNCA DESAPARECE) -->
+      <div class="p-3 sm:p-4 bg-stone-950 border-t-2 border-amber-900/60 shrink-0 shadow-2xl flex flex-wrap items-center justify-between gap-3 z-20">
+        
+        <!-- Status dos recursos da rodada -->
+        <div class="flex items-center gap-3 text-xs font-mono">
+          <div class="flex items-center gap-1.5 bg-stone-900 border border-stone-800 px-3 py-1.5 rounded-lg">
+            <span class="text-stone-400">Movimento (9m):</span>
+            <span id="status-movement" class="font-bold text-emerald-400 text-xs">✓ DISPONÍVEL</span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-stone-900 border border-stone-800 px-3 py-1.5 rounded-lg">
             <span class="text-stone-400">Ação:</span>
-            <span id="status-action" class="font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800/50 px-2 py-0.5 rounded text-[10px]">
-              ✓ DISPONÍVEL
-            </span>
+            <span id="status-action" class="font-bold text-emerald-400 text-xs">✓ DISPONÍVEL</span>
           </div>
         </div>
 
-        <span class="text-[10px] text-stone-500">1 Movimento e 1 Ação por turno</span>
-      </div>
-
-      <!-- Log de Combate estilo BiteFight/Gladiatus -->
-      <div id="combat-log" class="bg-stone-950 border border-stone-800 rounded-lg p-2.5 overflow-y-auto space-y-1 text-xs font-mono min-h-[75px] max-h-[95px] my-1.5">
-        <div class="text-stone-500 italic">⚔️ O combate começou!</div>
-      </div>
-
-      <!-- MENU DE AÇÕES Específico (Mover, Atacar e Passar Turno) -->
-      <div class="mt-1 pt-2 border-t border-stone-800 flex flex-wrap items-center justify-between gap-2">
-        <div class="flex items-center gap-2">
-          <!-- Botão 1: Mover (ativa a prévia de 9 metros no grid) -->
-          <button id="btn-toggle-move" onclick="toggleMoveMode()" class="bg-sky-950 hover:bg-sky-900 border border-sky-600/70 px-4 py-2 rounded-lg text-left transition flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
-            <i data-lucide="footprints" class="w-4 h-4 text-sky-400"></i>
-            <div>
-              <div class="font-bold text-sky-200 text-xs font-serif">Mover (9 metros)</div>
-              <div class="text-[9px] text-sky-400">Ver prévia das 6 casas</div>
+        <!-- BOTÕES DE AÇÃO PRINCIPAIS -->
+        <div class="flex items-center gap-2.5">
+          <!-- Botão 1: Mover (9 metros) -->
+          <button id="btn-toggle-move" onclick="toggleMoveMode()" class="bg-gradient-to-r from-sky-900 to-sky-950 hover:from-sky-800 hover:to-sky-900 border-2 border-sky-500 px-4 py-2.5 rounded-xl transition flex items-center gap-2.5 shadow-lg active:scale-95 disabled:opacity-40 disabled:pointer-events-none">
+            <i data-lucide="footprints" class="w-5 h-5 text-sky-300"></i>
+            <div class="text-left">
+              <div class="font-bold text-sky-100 text-sm font-serif">Mover (9 metros)</div>
+              <div class="text-[10px] text-sky-300">Exibir prévia de alcance</div>
             </div>
           </button>
 
-          <!-- Botão 2: Atacar (gasta a ação da rodada) -->
-          <button id="btn-attack-action" onclick="executePlayerAttack()" class="bg-amber-950 hover:bg-amber-900 border border-amber-600/70 px-4 py-2 rounded-lg text-left transition flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
-            <i data-lucide="sword" class="w-4 h-4 text-amber-400"></i>
-            <div>
-              <div class="font-bold text-amber-200 text-xs font-serif">Atacar (Espada)</div>
-              <div class="text-[9px] text-amber-400" id="player-attack-dmg-text">Adjacente (1,5m) &bull; Dano Físico</div>
+          <!-- Botão 2: Atacar com Espada -->
+          <button id="btn-attack-action" onclick="executePlayerAttack()" class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-500 text-stone-950 px-5 py-2.5 rounded-xl border-2 border-amber-400 transition flex items-center gap-2.5 shadow-xl shadow-amber-950/80 active:scale-95 disabled:opacity-40 disabled:pointer-events-none">
+            <i data-lucide="swords" class="w-5 h-5"></i>
+            <div class="text-left">
+              <div class="font-bold text-sm font-serif">Atacar (Espada)</div>
+              <div class="text-[10px] font-mono text-stone-900 font-bold">1,5m &bull; Dano Físico</div>
             </div>
+          </button>
+
+          <!-- Botão 3: Encerrar Turno -->
+          <button id="btn-end-turn" onclick="endPlayerTurn()" class="bg-stone-800 hover:bg-stone-700 border border-stone-600 px-4 py-2.5 rounded-xl transition flex items-center gap-2 text-stone-200 font-serif font-bold text-xs shadow active:scale-95 disabled:opacity-40 disabled:pointer-events-none">
+            <span>Passar Turno</span>
+            <i data-lucide="step-forward" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <!-- Botão 3: Encerrar Turno -->
-        <button id="btn-end-turn" onclick="endPlayerTurn()" class="bg-stone-800 hover:bg-stone-700 border border-stone-600 px-4 py-2 rounded-lg transition flex items-center gap-2 text-stone-200 font-serif font-bold text-xs disabled:opacity-40 disabled:pointer-events-none">
-          <span>Encerrar Turno</span>
-          <i data-lucide="step-forward" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-    </div>
-  </div>
-        <button onclick="restartCombat()" class="text-stone-400 hover:text-red-400 flex items-center gap-1">
-          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-          Reiniciar Duelo
-        </button>
       </div>
 
     </div>
