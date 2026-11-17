@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chronicles of Blood & Glory - RPG</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Cinzel & MedievalSharp -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=MedievalSharp&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-stone-950 text-stone-200 min-h-screen flex flex-col justify-between selection:bg-amber-900 selection:text-amber-100">
+
+  <!-- TOPO: Cabeçalho com Estilo Clássico RPG -->
+  <header class="border-b border-amber-900/40 bg-stone-900/90 backdrop-blur sticky top-0 z-50 shadow-2xl">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600 to-amber-950 border border-amber-500/50 flex items-center justify-center shadow-lg shadow-amber-950/60">
+          <i data-lucide="shield" class="w-6 h-6 text-amber-200"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold font-serif tracking-wider text-amber-400 drop-shadow">CRÔNICAS DE SANGUE & GLÓRIA</h1>
+          <p class="text-xs text-stone-400">RPG de Navegador &bull; Protótipo de Criação & Atributos</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs bg-amber-950/80 border border-amber-800/60 text-amber-300 px-3 py-1.5 rounded-full font-mono flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+          Fase Alpha 0.1
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+    <!-- COLUNA DA ESQUERDA: Resumo do Herói, Raça, Classe & Habilidade Inata (5 colunas) -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- Card do Personagem -->
+      <div class="bg-stone-900/80 border-2 border-stone-800 rounded-xl p-6 shadow-2xl relative overflow-hidden backdrop-blur">
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex items-start gap-4">
+          <!-- Avatar Frame estilo Gladiatus -->
+          <div class="relative group">
+            <div class="w-24 h-24 rounded-lg bg-stone-950 border-2 border-amber-600/60 shadow-inner flex items-center justify-center overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover filter brightness-90 contrast-125" />
+              <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent"></div>
+            </div>
+            <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-amber-950 border border-amber-600/70 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded shadow">
+              Nv. 1
+            </span>
+          </div>
+
+          <div class="flex-1">
+            <label class="text-[11px] font-bold uppercase tracking-wider text-stone-400 block mb-1">Nome do Campeão</label>
+            <input type="text" id="character-name" value="Valerius" class="w-full bg-stone-950 border border-stone-700 focus:border-amber-500 rounded px-3 py-1.5 text-base font-serif font-bold text-amber-200 outline-none transition" />
+            
+            <div class="mt-3 flex flex-wrap gap-2 text-xs">
+              <span class="bg-stone-800 border border-stone-700 text-stone-300 px-2.5 py-1 rounded flex items-center gap-1">
+                <i data-lucide="user" class="w-3.5 h-3.5 text-amber-400"></i>
+                Raça: <strong class="text-amber-300">Humano</strong>
+              </span>
+              <span class="bg-stone-800 border border-stone-700 text-stone-300 px-2.5 py-1 rounded flex items-center gap-1">
+                <i data-lucide="sword" class="w-3.5 h-3.5 text-red-400"></i>
+                Classe: <strong class="text-red-300">Guerreiro</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-stone-800 my-5" />
+
+        <!-- BARRAS DE ATRIBUTOS VITAIS -->
+        <h3 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 flex items-center justify-between">
+          <span>Atributos Vitais</span>
+          <span class="text-[10px] text-stone-500 font-mono">Recursos do Campeão</span>
+        </h3>
+
+        <div class="space-y-3.5">
+          <!-- VIDA -->
+          <div>
+            <div class="flex justify-between items-center text-xs mb-1 font-semibold">
+              <span class="flex items-center gap-1.5 text-red-400">
+                <i data-lucide="heart" class="w-3.5 h-3.5 fill-red-500 text-red-500"></i>
+                Vida (HP)
+              </span>
+              <span class="font-mono text-red-300"><span id="val-hp">20</span> / <span id="max-hp">20</span></span>
+            </div>
+            <div class="w-full bg-stone-950 rounded-full h-3.5 p-0.5 border border-red-950/70 shadow-inner">
+              <div id="bar-hp" class="bg-gradient-to-r from-red-700 to-red-500 h-full rounded-full transition-all duration-300 shadow-sm" style="width: 100%;"></div>
+            </div>
+            <p class="text-[10px] text-stone-400 mt-0.5">Base 20 (Guerreiro) + 4 por ponto em Constituição.</p>
+          </div>
+
+          <!-- MANA -->
+          <div>
+            <div class="flex justify-between items-center text-xs mb-1 font-semibold">
+              <span class="flex items-center gap-1.5 text-sky-400">
+                <i data-lucide="droplet" class="w-3.5 h-3.5 fill-sky-500 text-sky-500"></i>
+                Mana (MP)
+              </span>
+              <span class="font-mono text-sky-300"><span id="val-mp">5</span> / <span id="max-mp">5</span></span>
+            </div>
+            <div class="w-full bg-stone-950 rounded-full h-3.5 p-0.5 border border-sky-950/70 shadow-inner">
+              <div id="bar-mp" class="bg-gradient-to-r from-sky-700 to-sky-500 h-full rounded-full transition-all duration-300 shadow-sm" style="width: 100%;"></div>
+            </div>
+            <p class="text-[10px] text-stone-400 mt-0.5">Base 5 (Guerreiro) + 4 por ponto em Inteligência.</p>
+          </div>
+
+          <!-- ENERGIA -->
+          <div>
+            <div class="flex justify-between items-center text-xs mb-1 font-semibold">
+              <span class="flex items-center gap-1.5 text-amber-400">
+                <i data-lucide="zap" class="w-3.5 h-3.5 fill-amber-500 text-amber-500"></i>
+                Energia (EP)
+              </span>
+              <span class="font-mono text-amber-300"><span id="val-ep">100</span> / <span id="max-ep">100</span></span>
+            </div>
+            <div class="w-full bg-stone-950 rounded-full h-3.5 p-0.5 border border-amber-950/70 shadow-inner">
+              <div id="bar-ep" class="bg-gradient-to-r from-amber-600 to-yellow-500 h-full rounded-full transition-all duration-300 shadow-sm" style="width: 100%;"></div>
+            </div>
+            <p class="text-[10px] text-stone-400 mt-0.5">Base 100 fixa. <strong class="text-amber-300">+20 EP regenerados por turno</strong> automaticamente.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PAINEL: Raça & Habilidades Inatas -->
+      <div class="bg-stone-900/80 border border-stone-800 rounded-xl p-5 shadow-xl">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400/90 mb-3 flex items-center gap-2">
+          <i data-lucide="dna" class="w-4 h-4 text-amber-400"></i>
+          Traços Raciais & Habilidade Inata
+        </h3>
+
+        <!-- Passiva Humana -->
+        <div class="bg-stone-950/70 border border-amber-900/40 rounded-lg p-3 mb-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-amber-200 flex items-center gap-1.5">
+              <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+              Passiva Racial: Ambição
+            </span>
+            <span class="text-[10px] bg-amber-950 text-amber-400 px-2 py-0.5 rounded border border-amber-800/50">Humano</span>
+          </div>
+          <p class="text-xs text-stone-400 mt-1 leading-relaxed">
+            Começa com <strong>1 habilidade inata adicional</strong> no nível 1 para customização personalizada.
+          </p>
+        </div>
+
+        <!-- Slot de Habilidade Inata Ativa -->
+        <div class="border-2 border-dashed border-amber-700/60 bg-amber-950/20 rounded-lg p-3.5 relative">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded bg-gradient-to-br from-amber-700 to-amber-950 border border-amber-500 flex items-center justify-center shrink-0 shadow">
+              <i data-lucide="biceps-flexed" class="w-5 h-5 text-amber-200"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold text-amber-300 font-serif">Força Aprimorada</h4>
+                <span class="text-[9px] uppercase tracking-wider bg-stone-900 text-stone-400 px-1.5 py-0.5 rounded border border-stone-700">Inata Nv. 1</span>
+              </div>
+              <p class="text-[11px] text-stone-300 mt-0.5">
+                Concede permanentemente <strong class="text-emerald-400">+2 pontos de Força</strong> ao personagem.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capacidade de Carga derivada -->
+        <div class="mt-4 pt-3 border-t border-stone-800/70 flex items-center justify-between text-xs">
+          <span class="text-stone-400 flex items-center gap-1.5">
+            <i data-lucide="package" class="w-3.5 h-3.5 text-stone-400"></i>
+            Capacidade de Carga:
+          </span>
+          <span class="font-mono text-stone-200 font-bold"><span id="carry-capacity">20</span> kg <span class="text-[10px] text-stone-500 font-normal">(10 + Força * 5)</span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLUNA DA DIREITA: Distribuição dos Atributos Normais (7 colunas) -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- BANNER DE PONTOS LIVRES -->
+      <div class="bg-gradient-to-r from-amber-950/80 via-stone-900 to-amber-950/80 border-2 border-amber-600/50 rounded-xl p-5 shadow-2xl flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-serif font-bold text-amber-300 tracking-wide flex items-center gap-2">
+            <i data-lucide="compass" class="w-5 h-5 text-amber-400"></i>
+            Distribuição de Atributos
+          </h2>
+          <p class="text-xs text-stone-400 mt-0.5">Todos os atributos iniciam em 0. Molde o estilo de combate do seu herói.</p>
+        </div>
+        <div class="text-right bg-stone-950/90 border border-amber-500/40 px-4 py-2 rounded-lg shadow-inner">
+          <div class="text-[10px] uppercase font-bold tracking-wider text-amber-400/80">Pontos Livres</div>
+          <div id="remaining-points" class="text-3xl font-mono font-black text-amber-300">15</div>
+        </div>
+      </div>
+
+      <!-- LISTA DOS 6 ATRIBUTOS NORMAIS -->
+      <div class="bg-stone-900/80 border-2 border-stone-800 rounded-xl p-6 shadow-2xl backdrop-blur space-y-4">
+        
+        <!-- 1. FORÇA -->
+        <div class="attribute-row bg-stone-950/60 border border-stone-800 hover:border-amber-700/50 rounded-lg p-3.5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded bg-red-950/50 border border-red-800/60 flex items-center justify-center shrink-0">
+              <i data-lucide="swords" class="w-4 h-4 text-red-400"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold font-serif text-stone-200">Força</h4>
+                <span class="text-[10px] bg-emerald-950/80 border border-emerald-700/50 text-emerald-300 px-1.5 py-0.2 rounded font-mono">+2 Inato</span>
+              </div>
+              <p class="text-xs text-stone-400">Aumenta capacidade de carga e dano em ataques e habilidades físicas.</p>
+            </div>
+          </div>
+          <div class="flex items-center self-end sm:self-center gap-3">
+            <button onclick="decrementAttribute('strength')" class="btn-attr w-8 h-8 rounded bg-stone-800 hover:bg-stone-700 active:scale-95 border border-stone-600 font-mono font-bold text-stone-300 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">-</button>
+            <div class="text-center w-12 font-mono font-bold">
+              <span id="attr-strength" class="text-lg text-amber-300">2</span>
+              <span class="text-[10px] text-stone-500 block -mt-1">(0+2)</span>
+            </div>
+            <button onclick="incrementAttribute('strength')" class="btn-attr w-8 h-8 rounded bg-amber-900/80 hover:bg-amber-800 active:scale-95 border border-amber-600 font-mono font-bold text-amber-200 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">+</button>
+          </div>
+        </div>
+
+        <!-- 2. CONSTITUIÇÃO -->
+        <div class="attribute-row bg-stone-950/60 border border-stone-800 hover:border-amber-700/50 rounded-lg p-3.5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded bg-emerald-950/50 border border-emerald-800/60 flex items-center justify-center shrink-0">
+              <i data-lucide="shield-plus" class="w-4 h-4 text-emerald-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold font-serif text-stone-200">Constituição</h4>
+              <p class="text-xs text-stone-400">Aumenta a Vida máxima (<strong class="text-emerald-400">+4 por ponto</strong>) e a chance de resistir a efeitos adversos.</p>
+            </div>
+          </div>
+          <div class="flex items-center self-end sm:self-center gap-3">
+            <button onclick="decrementAttribute('constitution')" class="btn-attr w-8 h-8 rounded bg-stone-800 hover:bg-stone-700 active:scale-95 border border-stone-600 font-mono font-bold text-stone-300 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">-</button>
+            <div class="text-center w-12 font-mono font-bold">
+              <span id="attr-constitution" class="text-lg text-amber-300">0</span>
+            </div>
+            <button onclick="incrementAttribute('constitution')" class="btn-attr w-8 h-8 rounded bg-amber-900/80 hover:bg-amber-800 active:scale-95 border border-amber-600 font-mono font-bold text-amber-200 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">+</button>
+          </div>
+        </div>
+
+        <!-- 3. DESTREZA -->
+        <div class="attribute-row bg-stone-950/60 border border-stone-800 hover:border-amber-700/50 rounded-lg p-3.5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded bg-amber-950/50 border border-amber-800/60 flex items-center justify-center shrink-0">
+              <i data-lucide="target" class="w-4 h-4 text-amber-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold font-serif text-stone-200">Destreza</h4>
+              <p class="text-xs text-stone-400">Aumenta dano de habilidades ágeis e desbloqueia o acesso a manobras refinadas.</p>
+            </div>
+          </div>
+          <div class="flex items-center self-end sm:self-center gap-3">
+            <button onclick="decrementAttribute('dexterity')" class="btn-attr w-8 h-8 rounded bg-stone-800 hover:bg-stone-700 active:scale-95 border border-stone-600 font-mono font-bold text-stone-300 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">-</button>
+            <div class="text-center w-12 font-mono font-bold">
+              <span id="attr-dexterity" class="text-lg text-amber-300">0</span>
+            </div>
+            <button onclick="incrementAttribute('dexterity')" class="btn-attr w-8 h-8 rounded bg-amber-900/80 hover:bg-amber-800 active:scale-95 border border-amber-600 font-mono font-bold text-amber-200 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">+</button>
+          </div>
+        </div>
+
+        <!-- 4. INTELIGÊNCIA -->
+        <div class="attribute-row bg-stone-950/60 border border-stone-800 hover:border-amber-700/50 rounded-lg p-3.5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded bg-sky-950/50 border border-sky-800/60 flex items-center justify-center shrink-0">
+              <i data-lucide="book-open" class="w-4 h-4 text-sky-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold font-serif text-stone-200">Inteligência</h4>
+              <p class="text-xs text-stone-400">Aumenta a Mana máxima (<strong class="text-sky-400">+4 por ponto</strong>) e o poder/escalonamento de feitiços arcanos.</p>
+            </div>
+          </div>
+          <div class="flex items-center self-end sm:self-center gap-3">
+            <button onclick="decrementAttribute('intelligence')" class="btn-attr w-8 h-8 rounded bg-stone-800 hover:bg-stone-700 active:scale-95 border border-stone-600 font-mono font-bold text-stone-300 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">-</button>
+            <div class="text-center w-12 font-mono font-bold">
+              <span id="attr-intelligence" class="text-lg text-amber-300">0</span>
+            </div>
+            <button onclick="incrementAttribute('intelligence')" class="btn-attr w-8 h-8 rounded bg-amber-900/80 hover:bg-amber-800 active:scale-95 border border-amber-600 font-mono font-bold text-amber-200 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">+</button>
+          </div>
+        </div>
+
+        <!-- 5. CARISMA -->
+        <div class="attribute-row bg-stone-950/60 border border-stone-800 hover:border-amber-700/50 rounded-lg p-3.5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded bg-purple-950/50 border border-purple-800/60 flex items-center justify-center shrink-0">
+              <i data-lucide="crown" class="w-4 h-4 text-purple-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold font-serif text-stone-200">Carisma</h4>
+              <p class="text-xs text-stone-400">Capacidade social, coerção, manipulação e descontos com mercadores e taverneiros.</p>
+            </div>
+          </div>
+          <div class="flex items-center self-end sm:self-center gap-3">
+            <button onclick="decrementAttribute('charisma')" class="btn-attr w-8 h-8 rounded bg-stone-800 hover:bg-stone-700 active:scale-95 border border-stone-600 font-mono font-bold text-stone-300 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">-</button>
+            <div class="text-center w-12 font-mono font-bold">
+              <span id="attr-charisma" class="text-lg text-amber-300">0</span>
+            </div>
+            <button onclick="incrementAttribute('charisma')" class="btn-attr w-8 h-8 rounded bg-amber-900/80 hover:bg-amber-800 active:scale-95 border border-amber-600 font-mono font-bold text-amber-200 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">+</button>
+          </div>
+        </div>
+
+        <!-- 6. SABEDORIA -->
+        <div class="attribute-row bg-stone-950/60 border border-stone-800 hover:border-amber-700/50 rounded-lg p-3.5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded bg-teal-950/50 border border-teal-800/60 flex items-center justify-center shrink-0">
+              <i data-lucide="eye" class="w-4 h-4 text-teal-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold font-serif text-stone-200">Sabedoria</h4>
+              <p class="text-xs text-stone-400">Eficácia de magias divinas, poderes de cura, percepção de perigos e intuição.</p>
+            </div>
+          </div>
+          <div class="flex items-center self-end sm:self-center gap-3">
+            <button onclick="decrementAttribute('wisdom')" class="btn-attr w-8 h-8 rounded bg-stone-800 hover:bg-stone-700 active:scale-95 border border-stone-600 font-mono font-bold text-stone-300 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">-</button>
+            <div class="text-center w-12 font-mono font-bold">
+              <span id="attr-wisdom" class="text-lg text-amber-300">0</span>
+            </div>
+            <button onclick="incrementAttribute('wisdom')" class="btn-attr w-8 h-8 rounded bg-amber-900/80 hover:bg-amber-800 active:scale-95 border border-amber-600 font-mono font-bold text-amber-200 flex items-center justify-center transition disabled:opacity-30 disabled:pointer-events-none">+</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTÕES DE AÇÃO: Resetar & Confirmar -->
+      <div class="flex items-center justify-between pt-2">
+        <button onclick="resetAttributes()" class="text-xs text-stone-400 hover:text-red-400 flex items-center gap-1.5 transition">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          Redistribuir todos os pontos
+        </button>
+
+        <button id="btn-confirm" onclick="openCombatModal()" class="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-500 text-stone-950 font-serif font-black px-6 py-2.5 rounded-lg border border-amber-400 shadow-lg shadow-amber-950/80 flex items-center gap-2 transition active:scale-95">
+          <i data-lucide="swords" class="w-4 h-4"></i>
+          <span>Testar em Combate (Arena)</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL / PAINEL DA ARENA DE COMBATE ESTILO GLADIATUS -->
+  <div id="combat-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    
+    <!-- ANÚNCIO NO CANTO SUPERIOR CENTRAL: COMBATE INICIADO -->
+    <div id="combat-banner-alert" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-none animate-combat-banner">
+      <div class="bg-gradient-to-r from-red-950 via-amber-950 to-red-950 border-2 border-amber-500/80 px-8 py-3 rounded-xl shadow-2xl shadow-red-950/90 text-center">
+        <h2 class="text-2xl font-serif font-black tracking-widest text-amber-300 drop-shadow-md">⚔️ COMBATE INICIADO! ⚔️</h2>
+        <p id="initiative-subtext" class="text-xs text-stone-300 font-mono mt-0.5">Rolando Iniciativa baseada em Destreza...</p>
+      </div>
+    </div>
+
+    <div class="bg-stone-900 border-2 border-amber-600/70 rounded-2xl max-w-4xl w-full p-5 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- Cabeçalho do Combate com Indicador de Turno e Iniciativa -->
+      <div class="flex items-center justify-between pb-3 border-b border-stone-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded bg-amber-950 border border-amber-600 flex items-center justify-center text-amber-300">
+            <i data-lucide="swords" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-serif font-bold text-amber-300">Arena Tática: Valerius vs Goblin Espadachim</h3>
+            <p id="initiative-display" class="text-[11px] text-stone-400 font-mono">Iniciativa: Aguardando rolagem...</p>
+          </div>
+        </div>
+
+        <!-- INDICADOR VISUAL DO TURNO ATUAL -->
+        <div class="flex items-center gap-3">
+          <div id="turn-indicator-badge" class="px-4 py-1.5 rounded-lg border font-serif font-black text-xs uppercase tracking-wider transition-all duration-300 shadow">
+            SEU TURNO
+          </div>
+          <button onclick="closeCombatModal()" class="text-stone-400 hover:text-stone-200 p-1">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Placar dos Combatentes -->
+      <div class="grid grid-cols-2 gap-4 my-2.5">
+        <!-- Jogador -->
+        <div class="bg-stone-950/80 border border-stone-800 rounded-xl p-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-serif font-bold text-amber-300 text-xs sm:text-sm" id="combat-player-name">Valerius (Guerreiro)</span>
+            <span class="text-[10px] text-stone-400 font-mono">Deslocamento: 9m (6 quad.)</span>
+          </div>
+          <!-- Barras de HP, MP, EP em combate -->
+          <div class="space-y-1 text-xs">
+            <div>
+              <div class="flex justify-between text-[10px] mb-0.5">
+                <span class="text-red-400 font-semibold">Vida</span>
+                <span class="font-mono text-stone-300"><span id="combat-p-hp">20</span> / <span id="combat-p-maxhp">20</span></span>
+              </div>
+              <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-red-950">
+                <div id="combat-bar-p-hp" class="bg-red-600 h-full transition-all duration-300" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-[10px] mb-0.5">
+                <span class="text-amber-400 font-semibold">Energia</span>
+                <span class="font-mono text-stone-300"><span id="combat-p-ep">100</span> / <span id="combat-p-maxep">100</span></span>
+              </div>
+              <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-amber-950">
+                <div id="combat-bar-p-ep" class="bg-amber-500 h-full transition-all duration-300" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inimigo: Goblin -->
+        <div class="bg-stone-950/80 border border-stone-800 rounded-xl p-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-serif font-bold text-emerald-400 text-xs sm:text-sm">Goblin Espadachim</span>
+            <span class="text-[10px] text-stone-400 font-mono">5 HP &bull; Espada Curta (2 Dano)</span>
+          </div>
+          <div class="space-y-1 text-xs">
+            <div>
+              <div class="flex justify-between text-[10px] mb-0.5">
+                <span class="text-red-400 font-semibold">Vida do Goblin</span>
+                <span class="font-mono text-stone-300"><span id="combat-e-hp">5</span> / 5</span>
+              </div>
+              <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-red-950">
+                <div id="combat-bar-e-hp" class="bg-emerald-600 h-full transition-all duration-300" style="width: 100%;"></div>
+              </div>
+            </div>
+            <p class="text-[10px] text-stone-400 mt-1 italic">Distância do alvo: <strong id="combat-distance-label" class="text-amber-300 font-mono">0 metros</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAPA TÁTICO EM GRID ESTILO ROLL20 (1,5m por quadrado) -->
+      <div class="my-1.5 bg-stone-950 border-2 border-amber-900/60 rounded-xl p-2.5 shadow-inner">
+        <div class="flex items-center justify-between text-[11px] mb-1.5 text-stone-400">
+          <span class="flex items-center gap-1.5 text-amber-300 font-semibold">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-400"></i>
+            Grid Tático (1 quadrado = 1,5m) &bull; Deslocamento máximo: 9m (6 quadrados)
+          </span>
+          <span id="move-mode-status" class="text-sky-400 font-mono text-[10px] bg-sky-950/60 border border-sky-800/40 px-2 py-0.5 rounded">
+            Selecione "Mover" para ver o alcance
+          </span>
+        </div>
+
+        <!-- Container do Grid -->
+        <div class="overflow-x-auto flex justify-center py-0.5">
+          <div id="tactical-grid" class="battle-grid-container border border-stone-800 rounded-lg p-1 grid grid-cols-8 gap-1 select-none">
+            <!-- As células são geradas via JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS DA RODADA DO JOGADOR (1 Movimento + 1 Ação) -->
+      <div class="bg-stone-950/90 border border-stone-800 rounded-lg px-3 py-1.5 flex items-center justify-between text-xs font-mono">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1.5">
+            <span class="text-stone-400">Movimentação (9m):</span>
+            <span id="status-movement" class="font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800/50 px-2 py-0.5 rounded text-[10px]">
+              ✓ DISPONÍVEL
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-stone-400">Ação:</span>
+            <span id="status-action" class="font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800/50 px-2 py-0.5 rounded text-[10px]">
+              ✓ DISPONÍVEL
+            </span>
+          </div>
+        </div>
+
+        <span class="text-[10px] text-stone-500">1 Movimento e 1 Ação por turno</span>
+      </div>
+
+      <!-- Log de Combate estilo BiteFight/Gladiatus -->
+      <div id="combat-log" class="bg-stone-950 border border-stone-800 rounded-lg p-2.5 overflow-y-auto space-y-1 text-xs font-mono min-h-[75px] max-h-[95px] my-1.5">
+        <div class="text-stone-500 italic">⚔️ O combate começou!</div>
+      </div>
+
+      <!-- MENU DE AÇÕES Específico (Mover, Atacar e Passar Turno) -->
+      <div class="mt-1 pt-2 border-t border-stone-800 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <!-- Botão 1: Mover (ativa a prévia de 9 metros no grid) -->
+          <button id="btn-toggle-move" onclick="toggleMoveMode()" class="bg-sky-950 hover:bg-sky-900 border border-sky-600/70 px-4 py-2 rounded-lg text-left transition flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
+            <i data-lucide="footprints" class="w-4 h-4 text-sky-400"></i>
+            <div>
+              <div class="font-bold text-sky-200 text-xs font-serif">Mover (9 metros)</div>
+              <div class="text-[9px] text-sky-400">Ver prévia das 6 casas</div>
+            </div>
+          </button>
+
+          <!-- Botão 2: Atacar (gasta a ação da rodada) -->
+          <button id="btn-attack-action" onclick="executePlayerAttack()" class="bg-amber-950 hover:bg-amber-900 border border-amber-600/70 px-4 py-2 rounded-lg text-left transition flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
+            <i data-lucide="sword" class="w-4 h-4 text-amber-400"></i>
+            <div>
+              <div class="font-bold text-amber-200 text-xs font-serif">Atacar (Espada)</div>
+              <div class="text-[9px] text-amber-400" id="player-attack-dmg-text">Adjacente (1,5m) &bull; Dano Físico</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Botão 3: Encerrar Turno -->
+        <button id="btn-end-turn" onclick="endPlayerTurn()" class="bg-stone-800 hover:bg-stone-700 border border-stone-600 px-4 py-2 rounded-lg transition flex items-center gap-2 text-stone-200 font-serif font-bold text-xs disabled:opacity-40 disabled:pointer-events-none">
+          <span>Encerrar Turno</span>
+          <i data-lucide="step-forward" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+        <button onclick="restartCombat()" class="text-stone-400 hover:text-red-400 flex items-center gap-1">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          Reiniciar Duelo
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RODAPÉ -->
+  <footer class="border-t border-stone-800/80 bg-stone-950 py-4 text-center text-xs text-stone-500">
+    <p>Projeto RPG Online &bull; Inspirado no visual e mecânicas de Gladiatus & BiteFight</p>
+  </footer>
+
+  <script src="game.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+/* Estilos Globais e Temáticos */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0c0a09;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(120, 53, 15, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(68, 64, 60, 0.15) 0px, transparent 50%);
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: 'Cinzel', serif;
+}
+
+/* Efeito de borda metálica/dourada para cards */
+.border-metallic {
+  border-image: linear-gradient(to bottom, #d97706, #78350f, #451a03) 1;
+}
+
+/* Transições suaves para os botões e barras */
+.btn-attr {
+  user-select: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-attr:hover:not(:disabled) {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+.btn-attr:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Glow e sombras para barras de vida/mana */
+#bar-hp {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+#bar-mp {
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+#bar-ep {
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+
+/* Linha de atributo ao passar o mouse */
+.attribute-row {
+  transition: all 0.2s ease;
+}
+
+.attribute-row:hover {
+  background-color: rgba(28, 25, 23, 0.9);
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+/* ESTILOS DO GRID TÁTICO ESTILO ROLL20 */
+.battle-grid-container {
+  background-color: #141210;
+  background-image: 
+    linear-gradient(to right, rgba(217, 119, 6, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(217, 119, 6, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.grid-cell {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  transition: background-color 0.15s ease;
+}
+
+.grid-cell:hover {
+  background-color: rgba(217, 119, 6, 0.18);
+}
+
+.grid-cell.reachable {
+  background-color: rgba(16, 185, 129, 0.15);
+  box-shadow: inset 0 0 8px rgba(16, 185, 129, 0.3);
+  cursor: pointer;
+}
+
+.grid-cell.obstacle {
+  background-color: #1c1917;
+  background-image: repeating-linear-gradient(45deg, #1c1917, #1c1917 5px, #292524 5px, #292524 10px);
+  cursor: not-allowed;
+}
+
+/* Tokens dos Personagens (estilo VTT / Roll20) */
+.token {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  user-select: none;
+  transition: transform 0.2s ease, all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.token-player {
+  border: 2px solid #f59e0b;
+  background: radial-gradient(circle, #78350f, #292524);
+  color: #fef3c7;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+}
+
+.token-enemy {
+  border: 2px solid #ef4444;
+  background: radial-gradient(circle, #7f1d1d, #1c1917);
+  color: #fee2e2;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+}
+
+/* Área de Alcance de Movimento (9 metros / 6 quadrados) */
+.grid-cell.in-move-range {
+  background-color: rgba(59, 130, 246, 0.2);
+  box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.4);
+  cursor: pointer;
+}
+
+.grid-cell.in-move-range:hover {
+  background-color: rgba(59, 130, 246, 0.4);
+  transform: scale(1.02);
+}
+
+/* Banner Central de Combate Iniciado */
+@keyframes bannerPop {
+  0% { transform: translate(-50%, -100%) scale(0.8); opacity: 0; }
+  20% { transform: translate(-50%, 0) scale(1.05); opacity: 1; }
+  30% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  85% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -30px) scale(0.95); opacity: 0; pointer-events: none; }
+}
+
+.animate-combat-banner {
+  animation: bannerPop 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
