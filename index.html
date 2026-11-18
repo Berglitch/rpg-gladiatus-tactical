@@ -172,8 +172,30 @@
           </div>
         </div>
 
+        <!-- Arma Equipada (Necessária para Ataques com Arma e Aparar) -->
+        <div class="mt-4 pt-3 border-t border-stone-800/70">
+          <div class="flex items-center justify-between text-xs mb-2">
+            <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+              <i data-lucide="sword" class="w-3.5 h-3.5 text-amber-400"></i>
+              Arma Equipada
+            </span>
+            <button id="btn-toggle-weapon" onclick="toggleWeaponEquipped()" class="text-[10px] px-2 py-0.5 rounded border border-amber-700/60 bg-amber-950/60 hover:bg-amber-900/70 text-amber-300 font-mono transition">
+              Desequipar
+            </button>
+          </div>
+          <div id="weapon-slot-card" class="bg-stone-950/80 border border-amber-800/50 rounded-lg p-2.5 flex items-center justify-between">
+            <div>
+              <div id="weapon-name-display" class="text-xs font-serif font-bold text-amber-200">Espada Longa de Ferro</div>
+              <div id="weapon-stats-display" class="text-[10px] text-stone-400 font-mono">Corpo a Corpo &bull; Alcance: 1,5m</div>
+            </div>
+            <span id="weapon-status-badge" class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800/60 px-2 py-0.5 rounded">
+              EQUIPADA
+            </span>
+          </div>
+        </div>
+
         <!-- Capacidade de Carga derivada -->
-        <div class="mt-4 pt-3 border-t border-stone-800/70 flex items-center justify-between text-xs">
+        <div class="mt-3 pt-3 border-t border-stone-800/70 flex items-center justify-between text-xs">
           <span class="text-stone-400 flex items-center gap-1.5">
             <i data-lucide="package" class="w-3.5 h-3.5 text-stone-400"></i>
             Capacidade de Carga:
@@ -374,12 +396,24 @@
             </div>
           </div>
 
-          <!-- BOTÕES DO TOPO: ZOOM E FECHAR -->
+          <!-- BOTÕES DO TOPO: ÁUDIO, CÂMERA, ZOOM E FECHAR -->
           <div class="flex items-center gap-2">
             <div class="bg-stone-900 border border-stone-700 rounded-lg p-1 flex items-center gap-1.5 text-xs shadow-inner">
-              <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-stone-400 ml-1"></i>
+              <button id="btn-toggle-music" onclick="GameAudio.toggleMusic()" class="px-2 h-6 rounded bg-amber-950/80 hover:bg-amber-900 border border-amber-700/60 text-amber-300 font-semibold flex items-center gap-1 transition text-[11px]" title="Ligar/Desligar Trilha Sonora">
+                🎵 <span class="hidden md:inline">Música ON</span>
+              </button>
+              <button id="btn-toggle-audio" onclick="GameAudio.toggleMuteAll()" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 text-emerald-400 flex items-center justify-center transition text-xs" title="Silenciar Todo o Áudio">
+                🔊
+              </button>
+              <div class="w-px h-4 bg-stone-700"></div>
+              <button onclick="centerCamera()" class="px-2 h-6 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 font-semibold flex items-center gap-1 transition active:scale-95 text-[11px]" title="Centralizar Câmera no Mapa">
+                <i data-lucide="locate-fixed" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline">Centralizar</span>
+              </button>
+              <div class="w-px h-4 bg-stone-700"></div>
+              <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-stone-400"></i>
               <button onclick="zoomOut()" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold flex items-center justify-center transition active:scale-95" title="Diminuir Zoom">-</button>
-              <button onclick="resetZoom()" id="zoom-level-label" class="font-mono text-amber-300 text-[11px] px-1 font-bold hover:underline" title="Resetar Zoom">100%</button>
+              <button onclick="resetZoom()" id="zoom-level-label" class="font-mono text-amber-300 text-[11px] px-1 font-bold hover:underline" title="Resetar Zoom (100%)">100%</button>
               <button onclick="zoomIn()" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold flex items-center justify-center transition active:scale-95" title="Aumentar Zoom">+</button>
             </div>
             <button onclick="closeCombatModal()" class="text-stone-400 hover:text-stone-200 p-1.5 rounded-lg hover:bg-stone-800 transition">
@@ -416,7 +450,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-center mb-1">
                 <span class="font-serif font-bold text-amber-300 text-xs sm:text-sm truncate" id="combat-player-name">Valerius</span>
-                <span class="text-[10px] text-stone-400 font-mono shrink-0">9m desloc.</span>
+                <span id="combat-weapon-badge" class="text-[10px] text-amber-300 bg-amber-950/70 border border-amber-800/50 px-1.5 py-0.5 rounded font-mono shrink-0">🗡️ Espada Longa (1,5m)</span>
               </div>
               <div class="space-y-1">
                 <div>
@@ -445,11 +479,11 @@
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-center mb-1">
                 <span class="font-serif font-bold text-emerald-400 text-xs sm:text-sm truncate">Goblin Espadachim</span>
-                <span class="text-[10px] text-stone-400 font-mono shrink-0">Espada Curta (2 Dano)</span>
+                <span class="text-[10px] text-orange-300/90 font-mono shrink-0">Espada Curta &bull; Skill: Golpe Pesado</span>
               </div>
               <div class="space-y-1">
                 <div class="flex justify-between text-[10px]">
-                  <span class="text-red-400 font-bold">Vida: <span id="combat-e-hp">5</span>/5</span>
+                  <span class="text-red-400 font-bold">Vida: <span id="combat-e-hp">40</span>/<span id="combat-e-maxhp">40</span></span>
                   <span class="text-stone-400">Distância: <strong id="combat-distance-label" class="text-amber-300 font-mono">0m</strong></span>
                 </div>
                 <div class="w-full bg-stone-900 h-2 rounded-full overflow-hidden border border-red-950/80">
@@ -462,20 +496,55 @@
 
         <!-- MAPA TÁTICO EM GRID ESTILO ROLL20 (16x10) -->
         <div class="bg-stone-950 border-2 border-stone-800 rounded-xl p-3 shadow-inner">
-          <div class="flex items-center justify-between text-xs mb-2 text-stone-400">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs mb-2 text-stone-400">
             <span class="flex items-center gap-1.5 text-amber-300 font-bold">
               <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
               Campo de Batalha (16x10) &bull; Ortogonal: 1,5m &bull; <span class="text-sky-300 font-semibold">Diagonal: 3,0m</span>
+              <span class="hidden md:inline text-stone-500 font-normal">&bull; 🖱️ Arraste para mover a câmera / Scroll para Zoom</span>
             </span>
             <span id="move-mode-status" class="text-sky-300 font-mono text-[11px] bg-sky-950/80 border border-sky-800/60 px-2.5 py-0.5 rounded shadow">
               Clique em "Mover" abaixo para ver o alcance
             </span>
           </div>
 
-          <!-- Container do Grid com scroll horizontal e vertical suave -->
-          <div class="overflow-x-auto overflow-y-auto max-h-[50vh] p-2 flex justify-start sm:justify-center rounded-lg bg-black/40">
+          <!-- Viewport da Câmera Interativa (Pan com Mouse + Zoom com Scroll) -->
+          <div id="camera-viewport" class="camera-viewport w-full h-[420px] sm:h-[460px] rounded-lg border border-stone-800 relative overflow-hidden select-none">
             <div id="tactical-grid" class="battle-grid-container select-none">
               <!-- As células são geradas via JavaScript -->
+            </div>
+
+            <!-- OVERLAY DE AVISO E MENU DE SKILLS DE REAÇÃO (ANTES DO ATAQUE INIMIGO) -->
+            <div id="reaction-prompt-overlay" class="hidden absolute inset-0 bg-black/55 backdrop-blur-[2px] z-40 flex items-center justify-center p-3">
+              <div class="reaction-modal-card bg-stone-950/95 border-2 border-amber-500/90 rounded-2xl max-w-lg w-full p-4 sm:p-5 shadow-2xl">
+                <!-- Alerta do Ataque Inimigo -->
+                <div class="flex items-start gap-3 pb-3 border-b border-stone-800">
+                  <div class="w-10 h-10 rounded-xl bg-red-950 border border-red-500/80 flex items-center justify-center shrink-0 animate-pulse">
+                    <i data-lucide="shield-alert" class="w-6 h-6 text-red-400"></i>
+                  </div>
+                  <div>
+                    <div class="text-[10px] uppercase tracking-widest font-mono font-bold text-red-400">⚡ Ataque Inimigo Iminente!</div>
+                    <h4 id="reaction-prompt-title" class="text-sm sm:text-base font-serif font-bold text-amber-200 mt-0.5 leading-snug">
+                      O inimigo usa "Golpe de Espada Curta", como você vai reagir?
+                    </h4>
+                  </div>
+                </div>
+
+                <!-- Lista Dinâmica de Skills de Reação -->
+                <div class="mt-3">
+                  <div class="text-[10px] uppercase tracking-wider font-mono text-stone-400 mb-2">Escolha uma Skill de Reação:</div>
+                  <div id="reaction-options-list" class="space-y-2.5">
+                    <!-- Opções geradas via JavaScript -->
+                  </div>
+                </div>
+
+                <!-- Opção Padrão: Não Reagir -->
+                <div class="mt-3 pt-3 border-t border-stone-800 flex justify-end">
+                  <button onclick="resolveEnemyAttackWithReaction('none')" class="px-4 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-600 text-stone-300 hover:text-white text-xs font-serif font-bold transition active:scale-95 flex items-center gap-1.5">
+                    <span>Não Reagir (Receber o Golpe)</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -524,7 +593,7 @@
             <i data-lucide="swords" class="w-5 h-5"></i>
             <div class="text-left">
               <div class="font-bold text-sm font-serif">Atacar (Espada)</div>
-              <div class="text-[10px] font-mono text-stone-900 font-bold">1,5m &bull; Dano Físico</div>
+              <div class="text-[10px] font-mono text-stone-900 font-bold">1,5m &bull; -15 Energia</div>
             </div>
           </button>
 
@@ -545,6 +614,7 @@
     <p>Projeto RPG Online &bull; Inspirado no visual e mecânicas de Gladiatus & BiteFight</p>
   </footer>
 
+  <script src="audio.js"></script>
   <script src="game.js"></script>
   <script>
     lucide.createIcons();
